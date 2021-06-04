@@ -3,10 +3,13 @@ import re
 import os
 import json
 from subprocess import run, call
+import pathlib
 
-CHECKPOINT_SAVE_DIRECTORY="/home/josh/chia/save"
-KNOWN_TEMP_DIRS = ["/home/josh/chia/plotting", "/mnt/chiadisk1"]
-
+CHECKPOINT_SAVE_DIRECTORY="/plotting_save"
+KNOWN_TEMP_DIRS = ["/mnt/plotting_dir"]
+for d in KNOWN_TEMP_DIRS:
+    pathlib.Path(d).mkdir(parents=True, exist_ok=True)
+pathlib.Path(CHECKPOINT_SAVE_DIRECTORY=).mkdir(parents=True, exist_ok=True)
 
 def get_filesize_gb(filepath):
     return os.stat(filepath).st_size/(1024*1024*1024)
@@ -14,12 +17,12 @@ def get_filesize_gb(filepath):
 def checkpoint_proc(job):
     save_dir = f"{CHECKPOINT_SAVE_DIRECTORY}/{job['plot_id']}"
     os.mkdir(save_dir)
-    result = run(["sudo", "criu", "dump", "-D", save_dir, "-t", job["pid"], "--shell-job"], capture_output=True, text=True
+    result = run(["sudo", "criu", "dump", "-D", save_dir, "-t", job["pid"], "--shell-job"], capture_output=True, text=True)
     with open(f"{save_dir}/job_details.json", "w+") as f_out:
         json.dump(job, f_out)
 
 def restore_checkpoint_proc(save_dir):
-    result = run(["sudo", "criu", "restore", "-d", "-D", f"{CHECKPOINT_SAVE_DIRECTORY}/{save_dir}", "--shell-job"], capture_output=True, text=True
+    result = run(["sudo", "criu", "restore", "-d", "-D", f"{CHECKPOINT_SAVE_DIRECTORY}/{save_dir}", "--shell-job"], capture_output=True, text=True)
 
 def plotman_get_status():
     result = run(["plotman", "status"], capture_output=True, text=True)
