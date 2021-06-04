@@ -3,4 +3,4 @@ A chia-blockchain suspension utility used to pause plotting in a manner that can
 
 Currently set up to run/call 'sudo criu' internally. Untested, but this may required passwordless sudo, as is the case in my plotting VM.
 
-Written by a self-taught programmer who is keen to receive constructive criticism and/or contributions.
+Written by a self-taught programmer who is keen to receive constructive criticism and/or contributions. (Still learning, be gentle!)
